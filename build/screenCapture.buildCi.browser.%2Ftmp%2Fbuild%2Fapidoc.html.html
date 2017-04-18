@@ -1,0 +1,314 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="http://cheton.github.io/browserify-css/">browserify-css (v0.10.0)</a>
+</h1>
+<h4>A Browserify transform for bundling, rebasing, inlining, and minifying CSS files</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.browserify-css">module browserify-css</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.browserify-css.browserify-css">
+            function <span class="apidocSignatureSpan"></span>browserify-css
+            <span class="apidocSignatureSpan">(filename, opts)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.browserify-css.toString">
+            function <span class="apidocSignatureSpan">browserify-css.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">browserify-css.</span>browser</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.browserify-css.browser">module browserify-css.browser</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.browserify-css.browser.createLink">
+            function <span class="apidocSignatureSpan">browserify-css.browser.</span>createLink
+            <span class="apidocSignatureSpan">(href, attributes)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.browserify-css.browser.createStyle">
+            function <span class="apidocSignatureSpan">browserify-css.browser.</span>createStyle
+            <span class="apidocSignatureSpan">(cssText, attributes, extraOptions)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.browserify-css" id="apidoc.module.browserify-css">module browserify-css</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.browserify-css.browserify-css" id="apidoc.element.browserify-css.browserify-css">
+        function <span class="apidocSignatureSpan"></span>browserify-css
+        <span class="apidocSignatureSpan">(filename, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">browserify-css = function (filename, opts) {
+    if ( ! /\.css$/i.test(filename)) {
+        return through();
+    }
+
+    var buffer = '';
+
+    options = _.merge({}, options, opts);
+
+    return through(
+        function transform(chunk, enc, next) {
+            buffer += chunk;
+            next();
+        },
+        function flush(done) {
+            var that = this;
+
+            cssTransform.call(this, options, filename, function(data) {
+                var rootDir = path.resolve(process.cwd(), options.rootDir);
+                var relativePath = path.relative(rootDir, path.dirname(filename));
+                var href = path.join(relativePath, path.basename(filename));
+
+                if (options.minify) {
+                    data = new CleanCSS(options.minifyOptions).minify(data);
+                }
+
+                options.onFlush({
+                    filename: filename,
+                    data: data,
+                    rootDir: rootDir,
+                    relativePath: relativePath,
+                    href: href
+                }, function(moduleBody) {
+                    if (moduleBody === undefined) {
+                        if ( ! options.autoInject) {
+                            moduleBody = 'module.exports = ' + JSON.stringify(data) + ';';
+                        } else {
+                            if (options.autoInjectOptions.verbose) {
+                                moduleBody = 'var css = ' + JSON.stringify(data) + '; (require(' + JSON.stringify('browserify-css
+') + ').createStyle(css, { "href": ' + JSON.stringify(href) + ' }, { "insertAt": ' + JSON.stringify(options.autoInjectOptions.insertAt
+) + ' })); module.exports = css;';
+                            } else {
+                                moduleBody = 'var css = ' + JSON.stringify(data) + '; (require(' + JSON.stringify('browserify-css
+') + ').createStyle(css, {}, { "insertAt": ' + JSON.stringify(options.autoInjectOptions.insertAt) + ' })); module.exports = css;';
+                            }
+                        }
+                    }
+
+                    if (moduleBody) {
+                        that.push(moduleBody);
+                    }
+                    that.push(null);
+                    done();
+                });
+            });
+        }
+    );
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.browserify-css.toString" id="apidoc.element.browserify-css.toString">
+        function <span class="apidocSignatureSpan">browserify-css.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * https://github.com/jbkirby/css-img-datauri-stream/blob/master/index.js
+ */
+var getDataURI = function(imageFile,mimeType) {
+    // Convert it.
+    var ret = 'data:';
+    ret += mimeType;
+    ret += ';base64,';
+    ret += imageFile.<span class="apidocCodeKeywordSpan">toString</span>('base64');
+    return ret;
+};
+
+var absUrlRegEx = /^(\/|data:)/;
+var protocolRegEx = /[^\:\/]*:\/\/([^\/])*/;
+var urlRegEx = /url\s*\((?!#)\s*(\s*"([^"]*)"|'([^']*)'|[^\)]*\s*)\s*\)/ig;
+var r;
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.browserify-css.browser" id="apidoc.module.browserify-css.browser">module browserify-css.browser</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.browserify-css.browser.createLink" id="apidoc.element.browserify-css.browser.createLink">
+        function <span class="apidocSignatureSpan">browserify-css.browser.</span>createLink
+        <span class="apidocSignatureSpan">(href, attributes)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">createLink = function (href, attributes) {
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var link = document.createElement('link');
+
+    link.href = href;
+    link.rel = 'stylesheet';
+
+    for (var key in attributes) {
+        if ( ! attributes.hasOwnProperty(key)) {
+            continue;
+        }
+        var value = attributes[key];
+        link.setAttribute('data-' + key, value);
+    }
+
+    head.appendChild(link);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.browserify-css.browser.createStyle" id="apidoc.element.browserify-css.browser.createStyle">
+        function <span class="apidocSignatureSpan">browserify-css.browser.</span>createStyle
+        <span class="apidocSignatureSpan">(cssText, attributes, extraOptions)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">createStyle = function (cssText, attributes, extraOptions) {
+    extraOptions = extraOptions || {};
+
+    var style = document.createElement('style');
+    style.type = 'text/css';
+
+    for (var key in attributes) {
+        if ( ! attributes.hasOwnProperty(key)) {
+            continue;
+        }
+        var value = attributes[key];
+        style.setAttribute('data-' + key, value);
+    }
+
+    if (style.sheet) { // for jsdom and IE9+
+        style.innerHTML = cssText;
+        style.sheet.cssText = cssText;
+        insertStyleElement(style, { insertAt: extraOptions.insertAt });
+    } else if (style.styleSheet) { // for IE8 and below
+        insertStyleElement(style, { insertAt: extraOptions.insertAt });
+        style.styleSheet.cssText = cssText;
+    } else { // for Chrome, Firefox, and Safari
+        style.appendChild(document.createTextNode(cssText));
+        insertStyleElement(style, { insertAt: extraOptions.insertAt });
+    }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+href: href
+                }, function(moduleBody) {
+if (moduleBody === undefined) {
+    if ( ! options.autoInject) {
+        moduleBody = 'module.exports = ' + JSON.stringify(data) + ';';
+    } else {
+        if (options.autoInjectOptions.verbose) {
+            moduleBody = 'var css = ' + JSON.stringify(data) + '; (require(' + JSON.stringify('browserify
+-css') + ').<span class="apidocCodeKeywordSpan">createStyle</span>(css, { "href": ' + JSON.stringify(href
+) + ' }, { "insertAt": ' + JSON.stringify(options.autoInjectOptions.insertAt) + ' })); module.exports =
+css;';
+        } else {
+            moduleBody = 'var css = ' + JSON.stringify(data) + '; (require(' + JSON.stringify('browserify
+-css') + ').createStyle(css, {}, { "insertAt": ' + JSON.stringify(options.autoInjectOptions.insertAt) + &amp;#
+x27; })); module.exports = css;';
+        }
+    }
+}
+
+if (moduleBody) {
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
