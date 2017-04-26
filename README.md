@@ -1,6 +1,6 @@
 # npmdoc-browserify-css
 
-#### api documentation for  [browserify-css (v0.10.0)](http://cheton.github.io/browserify-css/)  [![npm package](https://img.shields.io/npm/v/npmdoc-browserify-css.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-browserify-css) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-browserify-css.svg)](https://travis-ci.org/npmdoc/node-npmdoc-browserify-css)
+#### basic api documentation for  [browserify-css (v0.10.0)](http://cheton.github.io/browserify-css/)  [![npm package](https://img.shields.io/npm/v/npmdoc-browserify-css.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-browserify-css) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-browserify-css.svg)](https://travis-ci.org/npmdoc/node-npmdoc-browserify-css)
 
 #### A Browserify transform for bundling, rebasing, inlining, and minifying CSS files
 
@@ -89,7 +89,8 @@
         "prepublish": "npm run build && npm test",
         "test": "gulp && node_modules/.bin/tap --coverage test/*.js"
     },
-    "version": "0.10.0"
+    "version": "0.10.0",
+    "bin": {}
 }
 ```
 
