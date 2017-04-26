@@ -72,15 +72,6 @@
 
         <li>
 
-            <a class="apidocElementLiA" href="#apidoc.element.browserify-css.toString">
-            function <span class="apidocSignatureSpan">browserify-css.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-        <li>
-
             <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">browserify-css.</span>browser</span>
 
         </li>
@@ -181,37 +172,6 @@
     );
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-
-    <h2>
-        <a href="#apidoc.element.browserify-css.toString" id="apidoc.element.browserify-css.toString">
-        function <span class="apidocSignatureSpan">browserify-css.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">toString = function () {
-    return text;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
- * https://github.com/jbkirby/css-img-datauri-stream/blob/master/index.js
- */
-var getDataURI = function(imageFile,mimeType) {
-    // Convert it.
-    var ret = &#x27;data:&#x27;;
-    ret += mimeType;
-    ret += &#x27;;base64,&#x27;;
-    ret += imageFile.<span class="apidocCodeKeywordSpan">toString</span>(&#x27;base64&#x27;);
-    return ret;
-};
-
-var absUrlRegEx = /^(\/|data:)/;
-var protocolRegEx = /[^\:\/]*:\/\/([^\/])*/;
-var urlRegEx = /url\s*\((?!#)\s*(\s*&#x22;([^&#x22;]*)&#x22;|&#x27;([^&#x27;]*)&#x27;|[^\)]*\s*)\s*\)/ig;
-var r;
-...</pre></li>
     </ul>
 
 
